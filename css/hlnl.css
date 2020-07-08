@@ -1,0 +1,13 @@
+body {
+    margin: 1rem;
+}
+
+p.timer {
+    font-family: Orbitron;
+    font-size: 3rem;
+}
+
+p.quote {
+    font-family: Dancing Script;
+    font-size: 2rem;
+}
