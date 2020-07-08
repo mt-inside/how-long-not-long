@@ -43,7 +43,7 @@ const Finish = function (state) {
 
 function renderDuration(d) {
   let units = ["years", "months", "days", "hours", "minutes", "seconds"]
-  return units.reduce((s, u) => s + d.get(u) + '\xa0' + u + ", ", "")
+  return units.map(u => d.get(u) + '\xa0' + u).join(", ")
 }
 
 function viewFn(state) {
