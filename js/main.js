@@ -71,13 +71,18 @@ const quotes = [ // TODO: from a lambda?
 ]
 const randomQuote = () => quotes[Math.round(Math.random() * (quotes.length - 1))] 
 
+const initialState =
+{
+  mode: "running",
+  deadline: moment("2020-08-22 00:00:00+01:00"), // TODO from where??
+};
 
 app({
-  init: {
-    mode: "running",
-    deadline: moment("2020-08-22 00:00:00+01:00"), // TODO from where??
-    quote: randomQuote(),
-  },
+  init: [
+    initialState,
+    [ (d, p) => d(Tick), {} ],
+    [ (d, p) => d(Quote), {} ],
+  ],
   subscriptions: state => [
     state.mode === "running" && interval(Tick, { delay: 1000 }),
     interval(Quote, { delay: 1000 * 10 * 60 }),
