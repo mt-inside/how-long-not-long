@@ -1,9 +1,11 @@
 import express from 'express';
+import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 var app = express();
+app.use(cors());
 
 app.listen(3000, () => {
  console.log("Server running on port 3000");
