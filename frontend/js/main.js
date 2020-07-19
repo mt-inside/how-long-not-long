@@ -17,22 +17,18 @@ const RecvQuotes = (state, resp) => (ChangeQuote({
 }));
 
 const Tick = function (state, time) {
-  switch(state.mode) {
-    case "running": // TODO should be able to assert this when the timer is codictional
-      let r = state.deadline.diff(moment())
-      if (r < 0) {
-        return Finish(state)
-      }
-      else
-      {
-        return {
-          ...state,
-          remaining: moment.duration(r)
-        }
-      }
-      break;
-    default: // unconfigured, finished.
-      return state;
+  console.assert(state.mode === "running", {state}, "Should only Tick when running");
+
+  let r = state.deadline.diff(moment())
+  if (r < 0) {
+    return Finish(state)
+  }
+  else
+  {
+    return {
+      ...state,
+      remaining: moment.duration(r)
+    }
   }
 }
 
@@ -90,8 +86,8 @@ app({
     Http({url: "http://localhost:3000/quotes", response: "json", action: RecvQuotes, }),
   ],
   subscriptions: state => [
-    Interval({ every: 1000, action: Tick }),
-    Interval({ every: 1000*10*60, action: ChangeQuote }),
+    state.mode === "running" && Interval({ every: 1000, action: Tick }),
+    state.mode === "running" && Interval({ every: 1000*10*60, action: ChangeQuote }),
   ],
   view: viewFn,
   node: document.getElementById("app")
