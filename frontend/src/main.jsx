@@ -1,8 +1,7 @@
-import { app, h } from "https://unpkg.com/hyperapp@2.0.3"
-import { Http, Interval } from "https://unpkg.com/hyperapp-fx@next?module"
-import moment from "https://unpkg.com/moment@2.27.0/dist/moment.js"
-
-const html = hyperx(h)
+import { app, h } from 'hyperapp';
+import { Http, Interval } from 'hyperapp-fx';
+import moment from 'moment';
+import './hlnl.css';
 
 
 const RecvDeadline = (state, resp) => (Tick({ // confirmed that doing it like this only causes one redraw, and after all these sync function calls. Ie if Tick skips us straight to `finished`, we don't ever try to draw `running`.
@@ -55,17 +54,16 @@ function renderDuration(d) {
 function viewFn(state) {
   switch (state.mode) {
     case "unconfigured":
-      return html`<div>En attendant config ⏱</div>`
+      return <div>En attendant config ⏱</div>
       break;
     case "running":
-      return html`
-      <div>
-        <p class="timer">${renderDuration(state.remaining)}</p>
-        <p class="quote">${state.quote}</p>
-      </div>`
+      return <div>
+        <p class="timer">{renderDuration(state.remaining)}</p>
+        <p class="quote">{state.quote}</p>
+      </div>
       break;
     case "finished":
-      return html`<div>Nous sommes arivées 🎉</div>`
+      return <div>Nous sommes arivées 🎉</div>
       break;
   }
 }
