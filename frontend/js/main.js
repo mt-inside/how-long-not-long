@@ -1,13 +1,24 @@
+import { app, h } from "https://unpkg.com/hyperapp@2.0.3"
+import { Http, Interval } from "https://unpkg.com/hyperapp-fx@next?module"
 import moment from "https://unpkg.com/moment@2.27.0/dist/moment.js"
-import { h, app } from "https://unpkg.com/hyperapp@2.0.3"
-import { interval } from "https://unpkg.com/@hyperapp/time@0.0.10"
 
 const html = hyperx(h)
 
 
+const RecvDeadline = (state, resp) => (Tick({ // confirmed that doing it like this only causes one redraw, and after all these sync function calls. Ie if Tick skips us straight to `finished`, we don't ever try to draw `running`.
+    ...state,
+    deadline: moment(resp.deadline),
+    mode: "running",
+}));
+
+const RecvQuotes = (state, resp) => (ChangeQuote({
+    ...state,
+    quotes: resp.quotes, // TODO separate state machine
+}));
+
 const Tick = function (state, time) {
   switch(state.mode) {
-    case "running":
+    case "running": // TODO should be able to assert this when the timer is codictional
       let r = state.deadline.diff(moment())
       if (r < 0) {
         return Finish(state)
@@ -20,15 +31,8 @@ const Tick = function (state, time) {
         }
       }
       break;
-    default:
+    default: // unconfigured, finished.
       return state;
-  }
-}
-
-const Quote = function (state, time) {
-  return {
-    ...state,
-    quote: randomQuote(),
   }
 }
 
@@ -40,6 +44,12 @@ const Finish = function (state) {
   }
 }
 
+const ChangeQuote = function (state, time) {
+  return {
+    ...state,
+    quote: randomElement(state.quotes),
+  }
+}
 
 function renderDuration(d) {
   let units = ["years", "months", "days", "hours", "minutes", "seconds"]
@@ -48,6 +58,9 @@ function renderDuration(d) {
 
 function viewFn(state) {
   switch (state.mode) {
+    case "unconfigured":
+      return html`<div>En attendant config ⏱</div>`
+      break;
     case "running":
       return html`
       <div>
@@ -61,31 +74,24 @@ function viewFn(state) {
   }
 }
 
-const quotes = [ // TODO: from a lambda?
-    `How long? Not long. 'Cause what you reap, is what you sow`,
-    `Sed fugit interea, fugit inreparabile tempus`,
-    `Gather ye Rose-buds while ye may,
-    Old Time is still a-flying:
-    And this same flower that smiles to day,
-    To morrow will be dying.`,
-]
-const randomQuote = () => quotes[Math.round(Math.random() * (quotes.length - 1))] 
+const randomElement = (qs) => qs[Math.round(Math.random() * (qs.length - 1))]
 
 const initialState =
 {
-  mode: "running",
-  deadline: moment("2020-08-22 00:00:00+01:00"), // TODO from where??
+  mode: "unconfigured",
+  deadline: null,
+  quotes: null,
 };
 
 app({
   init: [
     initialState,
-    [ (d, p) => d(Tick), {} ],
-    [ (d, p) => d(Quote), {} ],
+    Http({url: "http://localhost:3000/deadline", response: "json", action: RecvDeadline, }),
+    Http({url: "http://localhost:3000/quotes", response: "json", action: RecvQuotes, }),
   ],
   subscriptions: state => [
-    state.mode === "running" && interval(Tick, { delay: 1000 }),
-    interval(Quote, { delay: 1000 * 10 * 60 }),
+    Interval({ every: 1000, action: Tick }),
+    Interval({ every: 1000*10*60, action: ChangeQuote }),
   ],
   view: viewFn,
   node: document.getElementById("app")
