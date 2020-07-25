@@ -1,3 +1,6 @@
+IMAGE := docker.io/mtinside/hlnl-fe
+TAG := latest
+
 init:
 	yarn install
 
@@ -8,9 +11,12 @@ render:
 	yarn build
 
 render-docker: render
-	docker build . -t docker.io/mt-inside/hlnl
+	docker build . -t $(IMAGE):$(TAG)
+
+docker-push: render-docker
+	docker push $(IMAGE):$(TAG)
 
 run-docker: render-docker
-	docker run -ti --rm --name not-long \
+	docker run -ti --rm --name hlnl-fe \
 	    -p8080:80 \
-	    docker.io/mt-inside/hlnl
+	    $(IMAGE):$(TAG)

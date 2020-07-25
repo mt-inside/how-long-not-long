@@ -3,6 +3,8 @@ import { Http, Interval } from 'hyperapp-fx';
 import moment from 'moment';
 import './hlnl.css';
 
+const backend = "https://hlnl-be.frogstar-a.empty.org.uk"
+
 
 const RecvDeadline = (state, resp) => (Tick({ // confirmed that doing it like this only causes one redraw, and after all these sync function calls. Ie if Tick skips us straight to `finished`, we don't ever try to draw `running`.
     ...state,
@@ -80,8 +82,8 @@ const initialState =
 app({
   init: [
     initialState,
-    Http({url: "http://localhost:3000/deadline", response: "json", action: RecvDeadline, }),
-    Http({url: "http://localhost:3000/quotes", response: "json", action: RecvQuotes, }),
+    Http({url: `${backend}/deadline`, response: "json", action: RecvDeadline, }),
+    Http({url: `${backend}/quotes`, response: "json", action: RecvQuotes, }),
   ],
   subscriptions: state => [
     state.mode === "running" && Interval({ every: 1000, action: Tick }),
