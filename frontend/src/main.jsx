@@ -14,8 +14,8 @@ const RecvDeadline = (state, resp) => Tick({ // confirmed that doing it like thi
 
 const RecvQuotes = (state, resp) => ChangeQuote({
     ...state,
-    quotes: resp.quotes, // TODO separate state machine
-}));
+    quotes: resp, // TODO separate state machine
+});
 
 const Tick = function (state, time) {
   console.assert(state.mode === "running", {state}, "Should only Tick when running");
@@ -44,7 +44,7 @@ const Finish = function (state) {
 const ChangeQuote = function (state, time) {
   return {
     ...state,
-    quote: randomElement(state.quotes),
+    quote: randomElement(state.quotes).quote,
   }
 }
 
