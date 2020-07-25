@@ -6,13 +6,13 @@ import './hlnl.css';
 const backend = "https://hlnl-be.frogstar-a.empty.org.uk"
 
 
-const RecvDeadline = (state, resp) => (Tick({ // confirmed that doing it like this only causes one redraw, and after all these sync function calls. Ie if Tick skips us straight to `finished`, we don't ever try to draw `running`.
+const RecvDeadline = (state, resp) => Tick({ // confirmed that doing it like this only causes one redraw, and after all these sync function calls. Ie if Tick skips us straight to `finished`, we don't ever try to draw `running`.
     ...state,
     deadline: moment(resp.deadline),
     mode: "running",
-}));
+});
 
-const RecvQuotes = (state, resp) => (ChangeQuote({
+const RecvQuotes = (state, resp) => ChangeQuote({
     ...state,
     quotes: resp.quotes, // TODO separate state machine
 }));
