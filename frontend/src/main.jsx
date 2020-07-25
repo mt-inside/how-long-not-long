@@ -48,9 +48,14 @@ const ChangeQuote = function (state, time) {
   }
 }
 
-function renderDuration(d) {
+function renderDuration(d, shrt) {
   let units = ["years", "months", "days", "hours", "minutes", "seconds"]
-  return units.map(u => d.get(u) + '\xa0' + u).join(", ")
+
+  if (shrt) {
+    return units.map(u => d.get(u) + u[0]).join("")
+  } else {
+    return units.map(u => d.get(u) + '\xa0' + u).join(", ")
+  }
 }
 
 function viewFn(state) {
@@ -59,8 +64,11 @@ function viewFn(state) {
       return <div>En attendant config ⏱</div>
       break;
     case "running":
+      /* This is really meant to be a pure function and not have these kinda side effects 🤷‍♀️ */
+      document.title = renderDuration(state.remaining, true);
+
       return <div>
-        <p class="timer">{renderDuration(state.remaining)}</p>
+        <p class="timer">{renderDuration(state.remaining, false)}</p>
         <p class="quote">{state.quote}</p>
       </div>
       break;
