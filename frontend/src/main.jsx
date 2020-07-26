@@ -50,11 +50,19 @@ const ChangeQuote = function (state, time) {
 
 function renderDuration(d, shrt) {
   let units = ["years", "months", "days", "hours", "minutes", "seconds"]
+  /* no zip(), hence this mess */
+  let nz_vals = units
+    .map(u => [u, d.get(u)])
+    .filter(([u, n]) => n != 0);
 
   if (shrt) {
-    return units.map(u => d.get(u) + u[0]).join("")
+    return nz_vals
+          .map(([u, n]) => n + u[0])
+          .join("");
   } else {
-    return units.map(u => d.get(u) + '\xa0' + u).join(", ")
+    return nz_vals
+          .map(([u, n]) => n + "\xa0" + u)
+          .join(", ");
   }
 }
 
