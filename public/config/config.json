@@ -1,0 +1,9 @@
+{
+    "target": "test target",
+    "deadline": "2069-04-20 13:37:00+01:00",
+    "quotes": [
+        "foo",
+        "bar",
+        "baz"
+    ]
+}

@@ -2,6 +2,10 @@ body {
     margin: 1rem;
 }
 
+p.target {
+    font-size: 3rem;
+}
+
 p.timer {
     font-family: Orbitron;
     font-size: 3rem;

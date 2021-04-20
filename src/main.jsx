@@ -4,24 +4,20 @@ import { Http, Interval } from 'hyperapp-fx';
 import moment from 'moment';
 import './hlnl.css';
 
-const backend = "https://hlnl-be.frogstar-a.empty.org.uk"
+// anything that's not directly rendered, and doesn't change, is stored here.
+let config = null;
 
+const Configure = function (state, resp) {
+    config = resp
+    config.deadline = moment(config.deadline)
 
-const RecvDeadline = (state, resp) => Tick({ // confirmed that doing it like this only causes one redraw, and after all these sync function calls. Ie if Tick skips us straight to `finished`, we don't ever try to draw `running`.
-    ...state,
-    deadline: moment(resp.deadline),
-    mode: "running",
-});
+    return Tick(ChangeQuote({...state, mode: "running"}))
+}
 
-const RecvQuotes = (state, resp) => ChangeQuote({
-    ...state,
-    quotes: resp, // TODO separate state machine
-});
-
-const Tick = function (state, time) {
+const Tick = function (state, _time) {
   console.assert(state.mode === "running", {state}, "Should only Tick when running");
 
-  let r = state.deadline.diff(moment())
+  let r = config.deadline.diff(moment())
   if (r < 0) {
     return Finish(state)
   }
@@ -42,10 +38,10 @@ const Finish = function (state) {
   }
 }
 
-const ChangeQuote = function (state, time) {
+const ChangeQuote = function (state, _time) {
   return {
     ...state,
-    quote: randomElement(state.quotes).quote,
+    quote: randomElement(config.quotes),
   }
 }
 
@@ -69,20 +65,18 @@ function renderDuration(d, shrt) {
 
 function viewFn(state) {
   switch (state.mode) {
-    case "unconfigured":
-      return <div>En attendant config ⏱</div>
-      break;
     case "running":
       /* This is really meant to be a pure function and not have these kinda side effects 🤷‍♀️ */
       document.title = renderDuration(state.remaining, true);
 
       return <div>
+        <p class="target">{config.target}</p>
         <p class="timer">{renderDuration(state.remaining, false)}</p>
         <p class="quote">{state.quote}</p>
       </div>
       break;
     case "finished":
-      return <div>Nous sommes arivées 🎉</div>
+      return <div>Nous sommes arivées par {config.target} 🎉</div>
       break;
   }
 }
@@ -90,17 +84,17 @@ function viewFn(state) {
 const randomElement = (qs) => qs[Math.round(Math.random() * (qs.length - 1))]
 
 const initialState =
-{
+{ // schema:
   mode: "unconfigured",
-  deadline: null,
-  quotes: null,
+  remaining: null,
+  quote: null,
 };
 
 app({
   init: [
     initialState,
-    Http({url: `${backend}/deadline`, response: "json", action: RecvDeadline, }),
-    Http({url: `${backend}/quotes`, response: "json", action: RecvQuotes, }),
+    // Can't `import` this because it'll get bundled so can't be overridden in the container filesystem
+    Http({url: `/config/config.json`, response: "json", action: Configure, }), // run this effect as a side-effect of startup
   ],
   subscriptions: state => [
     state.mode === "running" && Interval({ every: 1000, action: Tick }),
