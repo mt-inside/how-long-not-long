@@ -1,4 +1,5 @@
-import { app, h } from 'hyperapp';
+import { app } from 'hyperapp';
+import h from 'hyperapp-jsx-pragma';
 import { Http, Interval } from 'hyperapp-fx';
 import moment from 'moment';
 import './hlnl.css';

@@ -992,22 +992,15 @@ hyperapp-fx@next:
   resolved "https://registry.yarnpkg.com/hyperapp-fx/-/hyperapp-fx-2.0.0-beta.1.tgz#ba8cec6ef83358b65451b12fca34b7b2d0e18b3c"
   integrity sha512-YVzRLwPR1iN1TfpQmCwmSId3qMFr1RKyNgfC01buY0HuAAxzVg/Z/NDsgH8ezERzIm56zIYzYsqQft+Bl1lWPw==
 
-hyperapp@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/hyperapp/-/hyperapp-2.0.3.tgz#15000a828fcd680ab04256a312e63b2caea99a4d"
-  integrity sha512-SiTeX3kYK8ggjNqAAnyi2QRUHRCZ87L35pn66LevbI+TLp1wSsruKd1BD6c82s5ve9L503/HwQtpdTA0f5Wk9w==
+hyperapp-jsx-pragma@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/hyperapp-jsx-pragma/-/hyperapp-jsx-pragma-1.3.0.tgz#2d729732679f64b67bfc056fea36ee215616d27d"
+  integrity sha512-aJ+BcqxeqOODmQ0lb/wggf21JmKh/0011LCOKiRiTAMGhgGQSwxbQUs7hGhDJKtSMNmC2ae/wNTxOddWLR5LHA==
 
-hyperscript-attribute-to-property@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/hyperscript-attribute-to-property/-/hyperscript-attribute-to-property-1.0.2.tgz#66ad4164f88beefacf46ec884bd3d1173c1c382a"
-  integrity sha512-oerMul16jZCmrbNsUw8QgrtDzF8lKgFri1bKQjReLw1IhiiNkI59CWuzZjJDGT79UQ1YiWqXhJMv/tRMVqgtkA==
-
-hyperx@^2.5.4:
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/hyperx/-/hyperx-2.5.4.tgz#72b4c3ed4111f64838221a9d0409e6bfc3f78d9e"
-  integrity sha512-iOkSh7Yse7lsN/B9y7OsevLWjeXPqGuHQ5SbwaiJM5xAhWFqhoN6erpK1dQsS12OFU36lyai1pnx1mmzWLQqcA==
-  dependencies:
-    hyperscript-attribute-to-property "^1.0.0"
+hyperapp@2.0.15:
+  version "2.0.15"
+  resolved "https://registry.yarnpkg.com/hyperapp/-/hyperapp-2.0.15.tgz#7b4c967ce9b230eec34314fb49c2c07bf992539e"
+  integrity sha512-jvT6VDnXeK/5qn3VSdnNfQL7JXrwcDG4PLBz0BiomwuV4IoeaFTUJ9ezbDb/4NbKrWZOv722VNqsBDHOB6gFXw==
 
 icss-replace-symbols@^1.1.0:
   version "1.1.0"
