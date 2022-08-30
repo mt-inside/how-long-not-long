@@ -12,6 +12,6 @@
     "moment": "^2.27.0"
   },
   "devDependencies": {
-    "vite": "^1.0.0-rc.1"
+    "vite": "^2.9.13"
   }
 }
